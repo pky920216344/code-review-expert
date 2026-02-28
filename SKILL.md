@@ -41,7 +41,19 @@ Perform a structured review of the current git changes with focus on SOLID, arch
 - **Large diff (>500 lines)**: Summarize by file first, then review in batches by module/feature area.
 - **Mixed concerns**: Group findings by logical feature, not just file order.
 
-### 2) SOLID + architecture smells
+### 2) Jira Context & Validation
+
+- **Extract Jira Tickets**: Scan the branch name, PR title, PR description, and commit messages for Jira ticket IDs (e.g., `PROJ-123`). Accept common patterns such as `[A-Z]+-[0-9]+`.
+- **Validate PR Metadata**: Verify that the PR title and at least one commit message reference the identified Jira ticket. If the ticket ID is missing from both, suggest adding it (e.g., prepend `PROJ-123: ` to the PR title).
+- **Analyze Ticket Alignment**: If a Jira ticket is found and its context (description, Acceptance Criteria) is accessible, compare the code changes against the ticket's stated goals. Confirm whether the implementation satisfies the Acceptance Criteria or call out gaps.
+- **Flag Discrepancies**: Explicitly note if the code changes appear unrelated to the linked Jira ticket, address a different scope than described, or contradict the ticket's requirements.
+
+**Edge cases:**
+- **No ticket found**: State clearly that no Jira ticket was detected and recommend linking one before merge.
+- **Multiple tickets**: List each ticket and assess alignment for each separately.
+- **Ticket context unavailable**: Note the ticket ID but skip the alignment analysis, and recommend that reviewers verify manually.
+
+### 3) SOLID + architecture smells
 
 - Load `references/solid-checklist.md` for specific prompts.
 - Look for:
@@ -53,14 +65,14 @@ Perform a structured review of the current git changes with focus on SOLID, arch
 - When you propose a refactor, explain *why* it improves cohesion/coupling and outline a minimal, safe split.
 - If refactor is non-trivial, propose an incremental plan instead of a large rewrite.
 
-### 3) Removal candidates + iteration plan
+### 4) Removal candidates + iteration plan
 
 - Load `references/removal-plan.md` for template.
 - Identify code that is unused, redundant, or feature-flagged off.
 - Distinguish **safe delete now** vs **defer with plan**.
 - Provide a follow-up plan with concrete steps and checkpoints (tests/metrics).
 
-### 4) Security and reliability scan
+### 5) Security and reliability scan
 
 - Load `references/security-checklist.md` for coverage.
 - Check for:
@@ -72,7 +84,7 @@ Perform a structured review of the current git changes with focus on SOLID, arch
   - **Race conditions**: concurrent access, check-then-act, TOCTOU, missing locks
 - Call out both **exploitability** and **impact**.
 
-### 5) Code quality scan
+### 6) Code quality scan
 
 - Load `references/code-quality-checklist.md` for coverage.
 - Check for:
@@ -81,7 +93,7 @@ Perform a structured review of the current git changes with focus on SOLID, arch
   - **Boundary conditions**: null/undefined handling, empty collections, numeric boundaries, off-by-one
 - Flag issues that may cause silent failures or production incidents.
 
-### 6) Commit message review
+### 7) Commit message review
 
 - Retrieve commit messages for the current changes using `git log --oneline` or `git log` as appropriate.
 - For each commit message, verify:
@@ -96,7 +108,7 @@ Perform a structured review of the current git changes with focus on SOLID, arch
   ```
 - Include commit message findings in the review output under a dedicated section (see output format below).
 
-### 7) Output format
+### 8) Output format
 
 Structure your review as follows:
 
@@ -105,6 +117,16 @@ Structure your review as follows:
 
 **Files reviewed**: X files, Y lines changed
 **Overall assessment**: [APPROVE / REQUEST_CHANGES / COMMENT]
+
+---
+
+## Jira Context
+<!-- Populated by step 2: Jira Context & Validation -->
+
+**Ticket(s)**: PROJ-123 _(or "None detected")_
+**Ticket summary**: _1–2 sentence description of the ticket's goal (if context available; otherwise "Context unavailable")_
+**Alignment with Acceptance Criteria**: [✅ Aligned / ⚠️ Partial / ❌ Misaligned / ℹ️ Unable to verify]
+_(Brief explanation of the alignment assessment or any discrepancies found)_
 
 ---
 
@@ -158,7 +180,7 @@ Description of the issue and suggested fix.
 - Any areas not covered (e.g., "Did not verify database migrations")
 - Residual risks or recommended follow-up tests
 
-### 8) Next steps confirmation
+### 9) Next steps confirmation
 
 After presenting findings, ask user how to proceed:
 
