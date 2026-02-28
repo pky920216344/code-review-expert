@@ -71,7 +71,22 @@ Perform a structured review of the current git changes with focus on SOLID, arch
   - **Boundary conditions**: null/undefined handling, empty collections, numeric boundaries, off-by-one
 - Flag issues that may cause silent failures or production incidents.
 
-### 6) Output format
+### 6) Commit message review
+
+- Retrieve commit messages for the current changes using `git log --oneline` or `git log` as appropriate.
+- For each commit message, verify:
+  - **Clarity**: The message clearly describes *what* was changed and *why*.
+  - **Meaningfulness**: The message is not vague (e.g., "fix", "update", "WIP", "misc changes") and provides enough context for a reviewer or future developer.
+  - **Format**: The subject line is concise (≤72 characters recommended), uses imperative mood (e.g., "Add feature" not "Added feature"), and does not trail off without explanation.
+  - **Scope**: Where multiple logical changes exist, each commit ideally represents a single coherent unit of work.
+- For any commit message that is unclear, vague, or unhelpful, **explicitly suggest a revised message** using this format:
+  ```
+  ❌ Original: <original message>
+  ✅ Suggested: <improved message that explains what changed and why>
+  ```
+- Include commit message findings in the review output under a dedicated section (see output format below).
+
+### 7) Output format
 
 Structure your review as follows:
 
@@ -105,6 +120,9 @@ Structure your review as follows:
 ## Removal/Iteration Plan
 (if applicable)
 
+## Commit Message Review
+(none or list of commits with suggested improvements)
+
 ## Additional Suggestions
 (optional improvements, not blocking)
 ```
@@ -121,7 +139,7 @@ Description of the issue and suggested fix.
 - Any areas not covered (e.g., "Did not verify database migrations")
 - Residual risks or recommended follow-up tests
 
-### 7) Next steps confirmation
+### 8) Next steps confirmation
 
 After presenting findings, ask user how to proceed:
 
