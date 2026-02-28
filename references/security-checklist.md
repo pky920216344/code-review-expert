@@ -7,6 +7,9 @@
 - **SSRF**: User-controlled URLs reaching internal services without allowlist validation
 - **Path traversal**: User input in file paths without sanitization (`../` attacks)
 - **Prototype pollution**: Unsafe object merging in JavaScript (`Object.assign`, spread with user input)
+- **Mass Assignment / Overposting**: Binding HTTP request data directly to domain models without a DTO/allowlist, allowing users to modify fields they shouldn't (e.g., `isAdmin`)
+- **Unsafe Deserialization**: Deserializing untrusted data without type validation (e.g., Python `pickle`, Java `ObjectInputStream`, YAML parsing)
+- **XXE (XML External Entity)**: Parsing XML input without disabling external entity resolution
 
 ## AuthN/AuthZ
 
@@ -15,6 +18,9 @@
 - Trusting client-provided roles/flags/IDs
 - Broken access control (IDOR - Insecure Direct Object Reference)
 - Session fixation or weak session management
+- **Insecure OAuth/OIDC Implementations**: Missing `state` parameter validation (CSRF), improper redirect URI validation
+- **Brute Force / Credential Stuffing**: Missing rate limiting or account lockout mechanisms on login/password-reset endpoints
+- **MFA Bypass**: Workflows that allow users to skip or bypass Multi-Factor Authentication
 
 ## JWT & Token Security
 
@@ -58,6 +64,8 @@
 - Hardcoded IVs or salts
 - Using encryption without authentication (ECB mode, no HMAC)
 - Insufficient key length
+- **Insecure Password Hashing**: Using fast hashes (MD5, SHA256) instead of work-factor hashes (bcrypt, Argon2, PBKDF2) for passwords
+- **Predictable Randomness**: Using `Math.random()` or equivalent non-cryptographically secure PRNGs for tokens, passwords, or keys
 
 ## Race Conditions
 
@@ -110,9 +118,15 @@ if user.balance >= amount:  # Check-then-act
 - "What shared state does this code access?"
 - "How does this behave under high concurrency?"
 
+## Infrastructure & Cloud Security
+
+- **Misconfigured Cloud Permissions (IAM)**: Overly permissive IAM roles attached to compute resources (e.g., `s3:*`); violates the principle of least privilege
+- **Container Security**: Running containers as root, mounting sensitive host directories (e.g., `/var/run/docker.sock`), or missing resource limits (CPU/memory)
+
 ## Data Integrity
 
 - Missing transactions, partial writes, or inconsistent state updates
 - Weak validation before persistence (type coercion issues)
 - Missing idempotency for retryable operations
 - Lost updates due to concurrent modifications
+- **Business Logic Flaws**: Flaws that don't violate technical constraints but violate business rules (e.g., applying a discount code multiple times, skipping required workflow steps, negative quantity in orders)
