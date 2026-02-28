@@ -18,6 +18,16 @@ Perform a structured review of the current git changes with focus on SOLID, arch
 | **P2** | Medium | Code smell, maintainability concern, minor SOLID violation | Fix in this PR or create follow-up |
 | **P3** | Low | Style, naming, minor suggestion | Optional improvement |
 
+## Scope Constraint: Diff-First, Legacy-Separate, Legacy-Non-Blocking
+
+> **STRICT RULE — must be followed on every review:**
+>
+> 1. **Diff-First**: The primary review MUST focus **only on the current code changes** (the diff). Do not mix legacy findings into the main review findings.
+> 2. **Legacy-Separate**: Existing/surrounding legacy code MAY be read for context. Any issues found in legacy code MUST be placed in a **separate, dedicated section** titled `## Legacy Code Observations` that appears **after** the main findings.
+> 3. **Legacy-Non-Blocking**: Issues identified in legacy code MUST NOT block the current PR merge. They CANNOT be rated **P0** or **P1** for the current PR. They are treated as informational suggestions or tech-debt prompts only, suitable for future refactoring.
+
+---
+
 ## Workflow
 
 ### 1) Preflight context
@@ -99,6 +109,7 @@ Structure your review as follows:
 ---
 
 ## Findings
+<!-- Scope: current diff changes ONLY. Do NOT include legacy code issues here. -->
 
 ### P0 - Critical
 (none or list)
@@ -125,6 +136,14 @@ Structure your review as follows:
 
 ## Additional Suggestions
 (optional improvements, not blocking)
+
+---
+
+## Legacy Code Observations
+<!-- Issues found in existing/surrounding code that was NOT part of the current diff.
+     These are NON-BLOCKING — they MUST NOT be rated P0 or P1 and do not affect the
+     merge decision for this PR. Treat them as informational tech-debt prompts only. -->
+(none or list suggestions for future refactoring)
 ```
 
 **Inline comments**: Use this format for file-specific findings:
