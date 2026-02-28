@@ -92,6 +92,7 @@ Perform a structured review of the current git changes with focus on SOLID, arch
   - **Error handling**: swallowed exceptions, overly broad catch, missing error handling, async errors
   - **Performance**: N+1 queries, CPU-intensive ops in hot paths, missing cache, unbounded memory
   - **Boundary conditions**: null/undefined handling, empty collections, numeric boundaries, off-by-one
+  - **Hygiene**: Strict prohibition on unused imports, purely empty files (except `.gitkeep`), and files containing only commented-out code.
 - Flag issues that may cause silent failures or production incidents.
 
 ### 7) Commit message review

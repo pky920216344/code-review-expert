@@ -192,3 +192,30 @@ if (value) { ... }  // fails for 0, "", false
 - "Would this test still pass if the feature were completely removed?"
 - "Does this test cover the error path or only the success path?"
 - "Could this test fail intermittently due to timing or external dependencies?"
+
+---
+
+## Code Hygiene & Dead Code
+
+### Anti-patterns to Flag
+
+- **Unused Imports**: Modules, types, or functions that are imported but never referenced in the file.
+  ```javascript
+  // Bad: 'fs' is imported but never used
+  import fs from 'fs'
+  import { debounce } from 'lodash'  // only debounce is used — fs should be removed
+  ```
+- **Empty Files**: Purely empty files with no content whatsoever. `.gitkeep` files are explicitly exempt from this rule.
+- **Fully Commented-out Files / Dead Code**: Files where 100% of the contents are comments, meaning there is no active executable code or logic — only commented-out code blocks.
+  ```javascript
+  // Bad: entire file is commented-out dead code
+  // function oldFeature() {
+  //   doSomething()
+  // }
+  // module.exports = { oldFeature }
+  ```
+
+### Questions to Ask
+- "Is every import actually used somewhere in this file?"
+- "Does this file contain any active, executable code, or is it entirely comments?"
+- "Is this empty file intentional? If so, should it be a `.gitkeep`?"
