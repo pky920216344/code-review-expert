@@ -45,6 +45,7 @@ Perform a structured review of the current git changes with focus on SOLID, arch
 
 - **Extract Jira Tickets**: Scan the branch name, PR title, PR description, and commit messages for Jira ticket IDs (e.g., `PROJ-123`). Accept common patterns such as `[A-Z]+-[0-9]+`.
 - **Validate PR Metadata**: Verify that the PR title and at least one commit message reference the identified Jira ticket. If the ticket ID is missing from both, suggest adding it (e.g., prepend `PROJ-123: ` to the PR title).
+- **Require Explicit Jira URL in PR Description**: The agent MUST check the PR Description for an explicit Jira URL hyperlink (e.g., `https://jirap.corp.ebay.com/browse/TICKET-123`). It is **not sufficient** to have only the ticket ID text (e.g., `TICKET-123`) — the full URL hyperlink must be present. If the PR Description does **not** contain the full Jira URL, the agent MUST flag this as a metadata issue in the Code Review Report and prompt the user to add the link.
 - **Analyze Ticket Alignment**: If a Jira ticket is found and its context (description, Acceptance Criteria) is accessible, compare the code changes against the ticket's stated goals. Confirm whether the implementation satisfies the Acceptance Criteria or call out gaps.
 - **Flag Discrepancies**: Explicitly note if the code changes appear unrelated to the linked Jira ticket, address a different scope than described, or contradict the ticket's requirements.
 
@@ -124,6 +125,7 @@ Structure your review as follows:
 <!-- Populated by step 2: Jira Context & Validation -->
 
 **Ticket(s)**: PROJ-123 _(or "None detected")_
+**Jira URL in PR Description**: [✅ Present / ❌ Missing — please add the full Jira URL (e.g., `https://jirap.corp.ebay.com/browse/TICKET-123`) to the PR Description]
 **Ticket summary**: _1–2 sentence description of the ticket's goal (if context available; otherwise "Context unavailable")_
 **Alignment with Acceptance Criteria**: [✅ Aligned / ⚠️ Partial / ❌ Misaligned / ℹ️ Unable to verify]
 _(Brief explanation of the alignment assessment or any discrepancies found)_
